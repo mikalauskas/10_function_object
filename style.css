@@ -1,7 +1,7 @@
 html,
 body {
     height: 100%;
-    background-color: antiquewhite;
+    background: linear-gradient(-45deg, rgb(215, 253, 253), rgb(199, 248, 207), rgb(215, 206, 250));
 }
 
 .container {
@@ -16,6 +16,10 @@ body {
     border-radius: 30px;
 }
 
+.card {
+    box-shadow: 0px 5px 25px 5px grey;
+}
+
 .card-header {
     border-top-left-radius: 30px!important;
     border-top-right-radius: 30px!important;
@@ -27,8 +31,10 @@ body {
 }
 
 .card-image {
-    width: 300px;
+    width: 350px;
     height: 300px;
     object-fit: cover;
-    border-radius: 100px;
+    border-radius: 30px;
+    box-shadow: 0px 5px 15px 2px grey;
+    margin-bottom: 15px;
 }

@@ -20,23 +20,8 @@ const personGenerator = {
             "id_16": "Морозов"
         }
     }`,
-    secondNameJson: `{  
-        "count": 10,
-        "list": {
-            "id_1": "Александров",
-            "id_2": "Максимов",
-            "id_3": "Иванов",
-            "id_4": "Артемов",
-            "id_5": "Дмитриев",
-            "id_6": "Владимиров",
-            "id_7": "Михаилов",
-            "id_8": "Русланов",
-            "id_9": "Павлов",
-            "id_10": "Андреев"
-        }
-    }`,
     firstNameMaleJson: `{
-        "count": 10,
+        "count": 20,
         "list": {
             "id_1": "Александр",
             "id_2": "Максим",
@@ -47,11 +32,21 @@ const personGenerator = {
             "id_7": "Михаил",
             "id_8": "Даниил",
             "id_9": "Егор",
-            "id_10": "Андрей"
+            "id_10": "Степан",
+            "id_11": "Андрей",
+            "id_12": "Кирилл",
+            "id_13": "Матвей",
+            "id_14": "Илья",
+            "id_15": "Алексей",
+            "id_16": "Роман",
+            "id_17": "Сергей",
+            "id_18": "Владислав",
+            "id_19": "Ярослав",
+            "id_20": "Тимофей"
         }
     }`,
     firstNameFemaleJson: `{
-        "count": 10,
+        "count": 20,
         "list": {
             "id_1": "Ольга",
             "id_2": "Кристина",
@@ -62,7 +57,17 @@ const personGenerator = {
             "id_7": "Владлена",
             "id_8": "Екатерина",
             "id_9": "Лариса",
-            "id_10": "Галина"
+            "id_10": "София",
+            "id_11": "Дарья",
+            "id_12": "Мария",
+            "id_13": "Анна",
+            "id_14": "Виктория",
+            "id_15": "Полина",
+            "id_16": "Елизавета",
+            "id_17": "Ксения",
+            "id_18": "Валерия",
+            "id_19": "Варвара",
+            "id_20": "Александра"
         }
     }`,
     genderJson: `{
@@ -133,7 +138,7 @@ const personGenerator = {
         } else if (this.person.gender == 'Женщина') {
 
             return this.randomValue(this.firstNameFemaleJson);
-            
+
         }
 
         return 'Ошибка';
@@ -142,43 +147,76 @@ const personGenerator = {
 
     randomSecondName: function () {
 
+        let secondName = this.randomValue(this.firstNameMaleJson);
+
         if (this.person.gender == 'Мужчина') {
 
-            return this.randomValue(this.secondNameJson) + 'ич';
+            switch (secondName.substr(-1, 1)) {
+                case 'й':
+                    return secondName.replace('й', '') + 'евич';
+                case 'я':
+                    return secondName.replace('я', '') + 'ич';
+                case 'а':
+                    return secondName.replace('а', '') + 'ич';
+                case 'ь':
+                    return secondName.replace('ь', '') + 'евич';
+
+                default:
+                    return secondName + 'ович';
+            }
 
         } else if (this.person.gender == 'Женщина') {
 
-            return this.randomValue(this.secondNameJson) + 'на';
-            
+            switch (secondName.substr(-1, 1)) {
+                case 'й':
+                    return secondName.replace('й', '') + 'евна';
+                case 'я':
+                    return secondName.replace('я', '') + 'инична';
+                case 'а':
+                    if (secondName == 'Никита') {
+                        return secondName.replace('а', '') + 'ична';
+                    }
+                case 'ь':
+                    return secondName.replace('ь', '') + 'евна';
+
+                default:
+                    return secondName + 'овна';
+            }
+
         }
 
         return 'Ошибка';
 
     },
 
-    leapYear: function(year) {
+    leapYear: function (year) {
 
         if ((0 == year % 4) && (0 != year % 100) || (0 == year % 400)) {
-            return this.randomIntNumber(29,1);
+            return this.randomIntNumber(29, 1);
         } else {
-            return this.randomIntNumber(28,1);
+            return this.randomIntNumber(28, 1);
         }
+
+    },
+
+    randomYear: function () {
+
+        return this.randomIntNumber(new Date().getFullYear(), new Date().getFullYear() - 80);
 
     },
 
     randomBirthday: function () {
 
         let month = this.randomValue(this.monthsJson);
-        let year = this.randomIntNumber(2022,1923);
         let day = (month) => {
             if (month == 'февраля') {
-                return this.leapYear(year);
+                return this.leapYear(this.person.year);
             } else if (month == 'апреля' || month == 'июня' || month == 'сентября' || month == 'ноября') {
-                return this.randomIntNumber(30,1);
+                return this.randomIntNumber(30, 1);
             }
-            return this.randomIntNumber(31,1);
+            return this.randomIntNumber(31, 1);
         };
-        return day(month) + ' ' + month + ' ' + year;
+        return day(month) + ' ' + month + ' ' + this.person.year;
 
     },
 
@@ -191,7 +229,7 @@ const personGenerator = {
         } else if (this.person.gender == 'Женщина') {
 
             return this.randomValue(this.surnameJson) + 'а';
-            
+
         }
 
         return 'Ошибка';
@@ -200,14 +238,24 @@ const personGenerator = {
 
     randomProfession: function () {
 
+        const curYear = new Date().getFullYear();
+        const age = curYear - this.person.year;
+
         if (this.person.gender == 'Мужчина') {
+
+            if (age < 18) {
+                return 'безработный'
+            }
 
             return this.randomValue(this.maleProfessionsJson);
 
         } else if (this.person.gender == 'Женщина') {
 
+            if (age < 18) {
+                return 'безработная'
+            }
             return this.randomValue(this.femaleProfessionsJson);
-            
+
         }
 
         return 'Ошибка';
@@ -216,18 +264,47 @@ const personGenerator = {
 
     randomPhoto: function () {
 
+        const curYear = new Date().getFullYear();
+        const age = curYear - this.person.year;
+        let searchArgs;
+
         if (this.person.gender == 'Мужчина') {
 
-            return 'https://source.unsplash.com/random/?male,' + this.randomIntNumber(9999, 1);
+            searchArgs = 'male';
+
+            if (age < 13) {
+
+                searchArgs = 'baby';
+
+            } else if (age < 18 && age > 12) {
+                searchArgs = 'boy';
+
+            } else if (age > 50) {
+
+                searchArgs = 'oldman';
+            }
 
         } else if (this.person.gender == 'Женщина') {
 
-            return 'https://source.unsplash.com/random/?female,girls,woman,' + this.randomIntNumber(9999, 1);
-            
+            searchArgs = 'female,woman,girl';
+
+            if (age < 13) {
+
+                searchArgs = 'baby';
+
+            } else if (age < 18 && age > 12) {
+                searchArgs = 'girl';
+
+            } else if (age > 50) {
+
+                searchArgs = 'oldwoman';
+
+            }
+
         }
 
-        return 'Ошибка';
-        
+        return 'https://source.unsplash.com/random/?' + searchArgs + '&rnd=' + this.randomIntNumber(9999, 1);
+
     },
 
 
@@ -237,7 +314,8 @@ const personGenerator = {
         this.person.firstName = this.randomFirstName();
         this.person.secondName = this.randomSecondName();
         this.person.surname = this.randomSurname();
-        this.person.birthYear = this.randomBirthday();
+        this.person.year = this.randomYear();
+        this.person.birthDay = this.randomBirthday();
         this.person.profession = this.randomProfession();
         this.person.photo = this.randomPhoto();
         return this.person;

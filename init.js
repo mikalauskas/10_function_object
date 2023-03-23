@@ -6,7 +6,7 @@ window.onload = function () {
         document.querySelector('#firstNameOutput').innerText = initPerson.firstName;
         document.querySelector('#secondNameOutput').innerText = initPerson.secondName;
         document.querySelector('#genderOutput').innerText = initPerson.gender;
-        document.querySelector('#birthYearOutput').innerText = initPerson.birthYear;
+        document.querySelector('#birthDayOutput').innerText = initPerson.birthDay;
         document.querySelector('#professionOutput').innerText = initPerson.profession;
         document.querySelector('#photo').src = initPerson.photo;
     }
@@ -27,7 +27,7 @@ window.onload = function () {
             document.querySelector('#firstNameOutput').innerText = '';
             document.querySelector('#secondNameOutput').innerText = '';
             document.querySelector('#genderOutput').innerText = '';
-            document.querySelector('#birthYearOutput').innerText = '';
+            document.querySelector('#birthDayOutput').innerText = '';
             document.querySelector('#professionOutput').innerText = '';
             document.querySelector('#photo').src = '';
         }
